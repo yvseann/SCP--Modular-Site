@@ -1,0 +1,22 @@
+{
+    "editor.quickSuggestions": {
+        "other": false,
+        "comments": false,
+        "strings": false
+    },
+    "editor.suggestOnTriggerCharacters": false,
+    "editor.acceptSuggestionOnEnter": "off",
+    "editor.inlineSuggest.enabled": false,
+    "editor.suggest.showWords": false,
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "[lua]": {
+        "editor.quickSuggestions": {
+            "other": false
+        }
+    },
+    "[luau]": {
+        "editor.quickSuggestions": {
+            "other": false
+        }
+    }
+}

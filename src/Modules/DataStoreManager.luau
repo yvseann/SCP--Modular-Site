@@ -1,0 +1,154 @@
+--[[
+	Name: DataStoreManager
+	Author: yvseann/Sean_Developer
+	Description: Module that handles the saving and loading of user data.
+]]
+
+--[[
+	Loaded data for players flags
+	Type safety on load, check typeof(savedValue) == typeof(statInstance.Value)
+	error backoff - if saving fails, try again later
+	metadata - LastSave for each player.
+]]
+
+-->: Services
+local dataStoreService = game:GetService("DataStoreService")
+local runService = game:GetService("RunService")
+
+local Stat = {}
+Stat.__index = Stat
+
+-- Constructor
+function Stat.new(name, statType, defaultValue)
+	local self = setmetatable({}, Stat)
+	self.Name = name
+	self.Type = statType or "IntValue"
+	self.Default = defaultValue or 0
+	return self
+end
+
+-- Create Instance
+
+function Stat:createInstance(parent)
+	local stat = Instance.new(self.Type)
+	stat.Name = self.Name
+	stat.Value = self.Default
+	stat.Parent = parent
+	return stat
+end
+
+-- Datastore Module
+local DataStoreManager = {}
+DataStoreManager.loadedData = false
+
+DataStoreManager.stats = {
+	Stat.new("Credits", "IntValue", 100),
+	Stat.new("Level", "IntValue", 1),
+	Stat.new("XP","IntValue",  0),
+	Stat.new("Reputation", "IntValue", 0), -- just because i can just leave the default value empty, lets not waste resources on consulting the metatable
+}
+
+local keys = {
+	live = "90IEF890Iopodad[apl=-pw-a=dolJMFDOI=ifufoiJIJF=[09uje=u=8UFJ=8uf==jf",
+	dev = "DEVKEY",
+}
+
+--: Init the DataStore
+function DataStoreManager._init(plr)
+	if plr and plr:IsA("Player") then
+		warn("Initializing Folders for " .. plr.Name)
+
+		local playerStats = Instance.new("Folder")
+		playerStats.Name = "playerStats"
+		playerStats.Parent = plr
+
+		-- Loop through Stat objects
+		for _, statObj in ipairs(DataStoreManager.stats) do
+			statObj:createInstance(playerStats)
+		end
+	else
+		error("Failed to find player.")
+	end
+end
+
+-->: Get Keys
+function DataStoreManager.getStore()
+	if runService:IsStudio() then
+		print("DATASTORE | RUNNING IN DEVELOPER ENVIRONMENT")
+		return dataStoreService:GetDataStore(keys.dev)
+	else
+		print("DATASTORE | PLAYER MODE DATASTORE")
+		return dataStoreService:GetDataStore(keys.live)
+	end
+end
+
+function DataStoreManager.saveData(plr)
+	local tableToSave = {}
+
+	local plrStats = plr:FindFirstChild("playerStats")
+	if not plrStats then
+		DataStoreManager._init(plr)
+		plrStats = plr:FindFirstChild("playerStats")
+	end
+
+	for _, statObj in ipairs(DataStoreManager.stats) do
+		local statInstance = plrStats:FindFirstChild(statObj.Name)
+		if statInstance then
+			tableToSave[statObj.Name] = statInstance.Value
+		end
+	end
+
+	-- finally save stuff
+
+	local dataStore = DataStoreManager.getStore()
+	local success, err = pcall(function()
+		dataStore:UpdateAsync(plr.UserId, tableToSave)
+	end)
+
+	if success then
+		print("DATASTORE | SUCCESSFULLY SAVED DATA FOR ".. plr.Name)
+	else
+		warn("DATASTORE | FAILED TO SAVE DATA FOR ".. plr.Name .. ":".. err)
+	end
+end
+
+function DataStoreManager.loadData(plr)
+	local dataStore = DataStoreManager.getStore()
+
+	local data
+	local success, err = pcall(function()
+		data = dataStore:GetAsync(plr.UserId)
+	end)
+
+	if success and data then
+		print("DATASTORE | GOT DATA FOR ".. plr.Name.. "!")
+		local plrStats = plr:FindFirstChild("playerStats")
+		if not plrStats then
+			DataStoreManager._init(plr)
+			plrStats = plr:FindFirstChild("playerStats")
+		end
+
+		for statName, savedValue in pairs(data) do
+			local statInstance = plrStats:FindFirstChild(statName)
+			if statInstance then
+				statInstance.Value = savedValue
+				print(plr.Name.. ": ".. statInstance.Name.. " loaded!")
+			else
+				warn("DATASTORE | Missing stat '" .. statName .. "' for " .. plr.Name)
+			end
+		end
+
+	else
+		warn("DATASTORE | Player " .. plr.Name .. " has no data!")
+		DataStoreManager._init(plr)
+	end
+
+	if not success then
+		warn("DATASTORE | FAILED TO LOAD DATA! ERR: ".. tostring(err))
+		return
+	end
+
+	DataStoreManager.loadedData = true
+end
+
+return DataStoreManager

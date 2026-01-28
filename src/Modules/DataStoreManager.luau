@@ -46,6 +46,7 @@ DataStoreManager.stats = {
 	Stat.new("Level", "IntValue", 1),
 	Stat.new("XP","IntValue",  0),
 	Stat.new("Reputation", "IntValue", 0), -- just because i can just leave the default value empty, lets not waste resources on consulting the metatable
+	Stat.new("Keycard", "IntValue", 1)
 }
 
 local keys = {
@@ -149,6 +150,27 @@ function DataStoreManager.loadData(plr)
 	end
 
 	DataStoreManager.loadedData = true
+end
+
+function DataStoreManager.getData(plr, dataName)
+	if not plr or not dataName then
+		warn("DATASTORE | getData called with invalid arguments")
+		return nil
+	end
+
+	local plrStats = plr:FindFirstChild("playerStats")
+	if not plrStats then
+		warn("DATASTORE | No stats folder found for " .. plr.Name)
+		return nil
+	end
+
+	local stat = plrStats:FindFirstChild(dataName)
+	if not stat then
+		warn("DATASTORE | Stat '" .. dataName .. "' does not exist for " .. plr.Name)
+		return nil
+	end
+
+	return stat.Value
 end
 
 return DataStoreManager

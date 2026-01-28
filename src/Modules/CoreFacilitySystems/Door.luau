@@ -6,7 +6,6 @@ Door.BSTAGGED = CS:GetTagged("BlastDoor")
 local blastDoor = require(script.Parent.Doors.BlastDoor)
 
 function Door.init()
-
     for _, BSDOOR in Door.BSTAGGED do
         local Touch = BSDOOR:FindFirstChild("Touch")
         if not Touch then
@@ -20,8 +19,8 @@ function Door.init()
             return
         end
 
-        CD.MouseClick:Connect(function()
-			blastDoor.open(BSDOOR)
+        CD.MouseClick:Connect(function(plr)
+			blastDoor.open(plr, BSDOOR)
         end)
     end
 end

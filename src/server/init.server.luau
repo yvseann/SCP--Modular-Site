@@ -5,14 +5,19 @@
 	Description: Controls the server functionality using modules.
 ]]
 
+game.Lighting.ClockTime = 00
+
 local Modules = script.Parent.Modules
 
 local dataStoreManager = require(Modules.DataStoreManager)
 local AntiCheat = require(Modules.AntiCheat.AntiCheat)
 
 local Cameras = require(Modules.CoreFacilitySystems.Camera)
+local Door = require(Modules.CoreFacilitySystems.Door)
 
 local MAX_AIR_TIME = 3
+
+Door.init()
 
 -- Player Added
 game.Players.PlayerAdded:Connect(function(plr)

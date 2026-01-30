@@ -68,7 +68,7 @@ function blastDoor.open(plr, door)
 	local closedPos = dPart1.CFrame
 	local openPos = closedPos * CFrame.new(-4, 0, 0)
 
-	local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
+	local tweenInfo = TweenInfo.new(4, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
 	local openTween = TS:Create(dPart1, tweenInfo, { CFrame = openPos })
 	local closeTween = TS:Create(dPart1, tweenInfo, { CFrame = closedPos })
 
@@ -77,7 +77,7 @@ function blastDoor.open(plr, door)
 	local closedPos2 = dPart2.CFrame
 	local openPos2 = closedPos2 * CFrame.new(4, 0, 0) 
 
-	local tweenInfo2 = TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
+	local tweenInfo2 = TweenInfo.new(4, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
 	local openTween2 = TS:Create(dPart2, tweenInfo2, { CFrame = openPos2 })
 	local closeTween2 = TS:Create(dPart2, tweenInfo2, { CFrame = closedPos2 })
 

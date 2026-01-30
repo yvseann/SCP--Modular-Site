@@ -63,23 +63,24 @@ function blastDoor.open(plr, door)
 	local bDeny = requireSound(button1, "Deny", "bDeny")
 
 	local bOpen1 = requireSound(door1, "Open1", "bOpen1")
+	local bClose1 = requireSound(door1, "Close1", "bClose1")
 
 	local dPart1 = requireChild(door, "Door1")
 	local closedPos = dPart1.CFrame
 	local openPos = closedPos * CFrame.new(-4, 0, 0)
 
 	local tweenInfo = TweenInfo.new(4, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
+	local closeTweenInfo = TweenInfo.new(3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
 	local openTween = TS:Create(dPart1, tweenInfo, { CFrame = openPos })
-	local closeTween = TS:Create(dPart1, tweenInfo, { CFrame = closedPos })
+	local closeTween = TS:Create(dPart1, closeTweenInfo, { CFrame = closedPos })
 
 	local dPart2 = requireChild(door, "Door2")
 
 	local closedPos2 = dPart2.CFrame
 	local openPos2 = closedPos2 * CFrame.new(4, 0, 0) 
 
-	local tweenInfo2 = TweenInfo.new(4, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
-	local openTween2 = TS:Create(dPart2, tweenInfo2, { CFrame = openPos2 })
-	local closeTween2 = TS:Create(dPart2, tweenInfo2, { CFrame = closedPos2 })
+	local openTween2 = TS:Create(dPart2, tweenInfo, { CFrame = openPos2 })
+	local closeTween2 = TS:Create(dPart2, closeTweenInfo, { CFrame = closedPos2 })
 
 	if blastDoor.bPush and bPush then
 		bPush:Play()
@@ -109,6 +110,8 @@ function blastDoor.open(plr, door)
 		task.wait(5)
 		closeTween:Play()
 		closeTween2:Play()
+
+		bClose1:Play()
 		closeTween.Completed:Wait()
 		isOpen.Value = false
 	else

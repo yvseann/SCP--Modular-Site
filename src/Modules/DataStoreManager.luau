@@ -4,7 +4,7 @@
 	Description: Module that handles the saving and loading of user data.
 ]]
 
---[[
+--[[ TODO
 	Loaded data for players flags
 	Type safety on load, check typeof(savedValue) == typeof(statInstance.Value)
 	error backoff - if saving fails, try again later
@@ -42,11 +42,11 @@ local DataStoreManager = {}
 DataStoreManager.loadedData = false
 
 DataStoreManager.stats = {
-	Stat.new("Credits", "IntValue", 100),
-	Stat.new("Level", "IntValue", 1),
-	Stat.new("XP","IntValue",  0),
-	Stat.new("Reputation", "IntValue", 0), -- just because i can just leave the default value empty, lets not waste resources on consulting the metatable
-	Stat.new("Keycard", "IntValue", 1)
+	Stat.new("Credits", "IntValue", 100, true),
+	Stat.new("Level", "IntValue", 1, true),
+	Stat.new("XP","IntValue",  0, true),
+	Stat.new("Reputation", "IntValue", 0, true),
+	Stat.new("Keycard", "IntValue", 1, false)
 }
 
 local keys = {

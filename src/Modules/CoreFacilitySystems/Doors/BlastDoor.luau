@@ -2,6 +2,8 @@ local blastDoor = {}
 
 local DS = require(script.Parent.Parent.Parent.DataStoreManager)
 
+local TS = game:GetService("TweenService")
+
 blastDoor.bPush = true
 blastDoor.bDeny = true
 
@@ -51,9 +53,33 @@ function blastDoor.open(plr, door)
 		return
 	end
 
+	local door1 = requireChild(door, "Door1")
+	if not door1 then
+		return
+	end
+
 	local bPush = requireSound(button1, "Push", "bPush")
 	local bSuccess = requireSound(button1, "Success", "bSuccess")
 	local bDeny = requireSound(button1, "Deny", "bDeny")
+
+	local bOpen1 = requireSound(door1, "Open1", "bOpen1")
+
+	local dPart1 = requireChild(door, "Door1")
+	local closedPos = dPart1.CFrame
+	local openPos = closedPos * CFrame.new(-4, 0, 0)
+
+	local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
+	local openTween = TS:Create(dPart1, tweenInfo, { CFrame = openPos })
+	local closeTween = TS:Create(dPart1, tweenInfo, { CFrame = closedPos })
+
+	local dPart2 = requireChild(door, "Door2")
+
+	local closedPos2 = dPart2.CFrame
+	local openPos2 = closedPos2 * CFrame.new(4, 0, 0) 
+
+	local tweenInfo2 = TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
+	local openTween2 = TS:Create(dPart2, tweenInfo2, { CFrame = openPos2 })
+	local closeTween2 = TS:Create(dPart2, tweenInfo2, { CFrame = closedPos2 })
 
 	if blastDoor.bPush and bPush then
 		bPush:Play()
@@ -73,8 +99,17 @@ function blastDoor.open(plr, door)
 
 	if keyAccess >= keyRequired.Value then
 		isOpen.Value = true
-        bSuccess:Play()
+
+		bSuccess:Play()
+		openTween:Play()
+		openTween2:Play()
+		bOpen1:Play()
+
+		openTween.Completed:Wait()
 		task.wait(5)
+		closeTween:Play()
+		closeTween2:Play()
+		closeTween.Completed:Wait()
 		isOpen.Value = false
 	else
 		if blastDoor.bDeny and bDeny then

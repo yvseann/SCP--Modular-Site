@@ -14,7 +14,7 @@ function Door.init()
             if part.Name == "Touch" then
 				local CD = part:FindFirstChild("ClickDetector")
 				if not CD then
-					warn("NO TOUCH FOUND IN BlastDoor. Modules.Door.luau")
+					warn("Modules/CoreFacilitySystems/Doors/Door.luau || NO TOUCH FOUND IN BlastDoor.")
 					return
 				end
 				CD.MouseClick:Connect(function(plr)
@@ -31,7 +31,7 @@ function Door.init()
 			if part.Name == "Touch" then
 				local CD = part:FindFirstChild("ClickDetector")
 				if not CD then
-					warn("NO TOUCH FOUND IN HeavyDoor. Modules.Door.luau")
+					warn("Modules/CoreFacilitySystems/Doors/Door.luau || NO TOUCH FOUND IN HeavyDoor.")
 					return
 				end
 				CD.MouseClick:Connect(function(plr)

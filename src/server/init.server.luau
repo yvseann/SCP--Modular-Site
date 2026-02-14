@@ -10,7 +10,8 @@ game.Lighting.ClockTime = 00
 local Modules = script.Parent.Modules
 
 local dataStoreManager = require(Modules.DataStoreManager)
-local AntiCheat = require(Modules.AntiCheat.AntiCheat)
+local AntiCheat = require(Modules.AntiCheat)
+local FixShadows = require(Modules.FixShadows)
 
 local Cameras = require(Modules.CoreFacilitySystems.Camera)
 local Door = require(Modules.CoreFacilitySystems.Door)
@@ -18,6 +19,7 @@ local Door = require(Modules.CoreFacilitySystems.Door)
 local MAX_AIR_TIME = 3
 
 Door.init()
+FixShadows._init()
 
 -- Player Added
 game.Players.PlayerAdded:Connect(function(plr)
@@ -46,7 +48,7 @@ end)
 -- In a case a developer shuts down servers, we need to save the data
 
 game:BindToClose(function()
-	print("DATASTORE | Server shutting down, saving all players...")
+	print("Server/ Datastore | Server shutting down, saving all players...")
 	for _, plr in ipairs(game.Players:GetPlayers()) do
 		dataStoreManager.saveData(plr)
 	end
@@ -56,11 +58,9 @@ end)
 
 task.spawn(function()
 	while task.wait(300) do -- 5 minutes
-		print("DATASTORE | Saving all players...")
+		print("Server/ DATASTORE | Saving all players...")
 		for _, plr in ipairs(game.Players:GetPlayers()) do
 			dataStoreManager.saveData(plr)
 		end
 	end
 end)
-
-

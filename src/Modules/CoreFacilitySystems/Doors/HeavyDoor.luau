@@ -10,7 +10,7 @@ heavyDoor.bDeny = true
 local function requireChild(parent, childName)
 	local child = parent:FindFirstChild(childName)
 	if not child then
-		warn(childName .. " NOT FOUND!")
+		warn("Modules/CoreFacilitySystems/Doors/HeavyDoor.luau || ".. childName .. " NOT FOUND!")
 		return nil
 	end
 	return child
@@ -19,7 +19,7 @@ end
 local function requireSound(parent, soundName, flagName)
 	local sound = parent:FindFirstChild(soundName)
 	if not sound then
-		warn(soundName .. " not found! Error HeavyDoor.luau!")
+		warn("Modules/CoreFacilitySystems/Doors/HeavyDoor.luau || ".. soundName .. " not found! Error HeavyDoor.luau!")
 		heavyDoor[flagName] = false
 		return nil
 	end
@@ -36,7 +36,7 @@ local function getRandomSound(parent, prefix)
 	end
 
 	if #sounds == 0 then
-		warn("No sounds found for prefix: " .. prefix)
+		warn("Modules/CoreFacilitySystems/Doors/HeavyDoor.luau || No sounds found for prefix: " .. prefix)
 		return nil
 	end
 
@@ -46,15 +46,24 @@ end
 local function requireIsOpen(door)
 	local isOpen = door:FindFirstChild("IsOpen")
 	if not isOpen or not isOpen:IsA("BoolValue") then
-		warn("IsOpen BoolValue missing on door!")
+		warn("Modules/CoreFacilitySystems/Doors/HeavyDoor.luau || IsOpen BoolValue missing on door!")
 		return nil
 	end
 	return isOpen
 end
 
+local function requireIsOpened(door)
+	local isOpened = door:FindFirstChild("IsOpened")
+	if not isOpened or not isOpened:IsA("BoolValue") then
+		warn("Modules/CoreFacilitySystems/Doors/HeavyDoor.luau || IsOpen BoolValue missing on door!")
+		return nil
+	end
+	return isOpened
+end
+
 function heavyDoor.open(plr, door)
 	if not plr or not door then
-		warn("PLR OR DOOR NOT FOUND! HeavyDoor.luau")
+		warn("Modules/CoreFacilitySystems/Doors/HeavyDoor.luau || PLR OR DOOR NOT FOUND! HeavyDoor.luau")
 		return
 	end
 
@@ -82,19 +91,32 @@ function heavyDoor.open(plr, door)
 	local bOpen = getRandomSound(door1, "Open")
 	local bClose = getRandomSound(door1, "Close")
 
-	local dPart1 = requireChild(door, "Door1")
-	local closedPos = dPart1.CFrame
-	local openPos = closedPos * CFrame.new(3.5, 0, 0)
+	local closedPos = door1:GetAttribute("ClosedPos")
+	local openPos = door1:GetAttribute("OpenPos")
+	if not closedPos then
+		door1:SetAttribute("ClosedPos", door1.CFrame)
+		door1:SetAttribute("OpenPos", door1.CFrame * CFrame.new(3.5, 0, 0))
+		closedPos = door1:GetAttribute("ClosedPos")
+		openPos = door1:GetAttribute("OpenPos")
+	end
 
-	local tweenInfo = TweenInfo.new(2.5, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
-	local closeTweenInfo = TweenInfo.new(3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
-	local openTween = TS:Create(dPart1, tweenInfo, { CFrame = openPos })
-	local closeTween = TS:Create(dPart1, closeTweenInfo, { CFrame = closedPos })
+	local tweenInfo = TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
+	local closeTweenInfo = TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
+	local openTween = TS:Create(door1, tweenInfo, { CFrame = openPos })
+	local closeTween = TS:Create(door1, closeTweenInfo, { CFrame = closedPos })
 
 	local dPart2 = requireChild(door, "Door2")
 
-	local closedPos2 = dPart2.CFrame
-	local openPos2 = closedPos2 * CFrame.new(2.2, 0, 0)
+	local closedPos2 = dPart2:GetAttribute("ClosedPos2")
+	local openPos2 = dPart2:GetAttribute("OpenPos2")
+	if not closedPos2 then
+		dPart2:SetAttribute("ClosedPos2", dPart2.CFrame)
+		dPart2:SetAttribute("OpenPos2", dPart2.CFrame * CFrame.new(2.2, 0, 0))
+		closedPos2 = dPart2:GetAttribute("ClosedPos2")
+		openPos2 = dPart2:GetAttribute("OpenPos2")
+	end
+
+	-- local openPos2 = closedPos2 * CFrame.new(2.2, 0, 0)
 
 	local openTween2 = TS:Create(dPart2, tweenInfo, { CFrame = openPos2 })
 	local closeTween2 = TS:Create(dPart2, closeTweenInfo, { CFrame = closedPos2 })
@@ -108,6 +130,11 @@ function heavyDoor.open(plr, door)
 		return
 	end
 
+	local isOpened = requireIsOpened(door)
+	if not isOpened then
+		return
+	end
+
 	if isOpen.Value then
 		if heavyDoor.bDeny and bDeny then
 			bDeny:Play()
@@ -116,21 +143,30 @@ function heavyDoor.open(plr, door)
 	end
 
 	if keyAccess >= keyRequired.Value then
-		isOpen.Value = true
-
-		bSuccess:Play()
-		openTween:Play()
-		openTween2:Play()
-		bOpen:Play()
-
-		openTween.Completed:Wait()
-		task.wait(5)
-		closeTween:Play()
-		closeTween2:Play()
-
-		bClose:Play()
-		closeTween.Completed:Wait()
-		isOpen.Value = false
+		if isOpened.Value == false then
+			isOpen.Value = true
+			isOpened.Value = true
+			if bSuccess then
+				bSuccess:Play()
+			end
+			if bOpen then
+				bOpen:Play()
+			end
+			openTween:Play()
+			openTween2:Play()
+			openTween.Completed:Wait()
+			isOpen.Value = false
+		else
+			isOpen.Value = true
+			isOpened.Value = false
+			if bClose then
+				bClose:Play()
+			end
+			closeTween:Play()
+			closeTween2:Play()
+			closeTween.Completed:Wait()
+			isOpen.Value = false
+		end
 	else
 		if heavyDoor.bDeny and bDeny then
 			bDeny:Play()

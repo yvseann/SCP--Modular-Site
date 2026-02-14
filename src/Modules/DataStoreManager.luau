@@ -57,7 +57,7 @@ local keys = {
 --: Init the DataStore
 function DataStoreManager._init(plr)
 	if plr and plr:IsA("Player") then
-		warn("Initializing Folders for " .. plr.Name)
+		warn("Modules/DataStoreManager.luau || Initializing Folders for " .. plr.Name)
 
 		local playerStats = Instance.new("Folder")
 		playerStats.Name = "playerStats"
@@ -68,17 +68,17 @@ function DataStoreManager._init(plr)
 			statObj:createInstance(playerStats)
 		end
 	else
-		error("Failed to find player.")
+		error("Modules/DataStoreManager.luau || Failed to find player.")
 	end
 end
 
 -->: Get Keys
 function DataStoreManager.getStore()
 	if runService:IsStudio() then
-		print("DATASTORE | RUNNING IN DEVELOPER ENVIRONMENT")
+		print("Modules/DataStoreManager.luau || RUNNING IN DEVELOPER ENVIRONMENT")
 		return dataStoreService:GetDataStore(keys.dev)
 	else
-		print("DATASTORE | PLAYER MODE DATASTORE")
+		print("Modules/DataStoreManager.luau || PLAYER MODE DATASTORE")
 		return dataStoreService:GetDataStore(keys.live)
 	end
 end
@@ -107,9 +107,9 @@ function DataStoreManager.saveData(plr)
 	end)
 
 	if success then
-		print("DATASTORE | SUCCESSFULLY SAVED DATA FOR ".. plr.Name)
+		print("Modules/DataStoreManager.luau || SUCCESSFULLY SAVED DATA FOR ".. plr.Name)
 	else
-		warn("DATASTORE | FAILED TO SAVE DATA FOR ".. plr.Name .. ":".. err)
+		warn("Modules/DataStoreManager.luau || FAILED TO SAVE DATA FOR ".. plr.Name .. ":".. err)
 	end
 end
 
@@ -122,7 +122,7 @@ function DataStoreManager.loadData(plr)
 	end)
 
 	if success and data then
-		print("DATASTORE | GOT DATA FOR ".. plr.Name.. "!")
+		print("Modules/DataStoreManager.luau || GOT DATA FOR ".. plr.Name.. "!")
 		local plrStats = plr:FindFirstChild("playerStats")
 		if not plrStats then
 			DataStoreManager._init(plr)
@@ -133,19 +133,19 @@ function DataStoreManager.loadData(plr)
 			local statInstance = plrStats:FindFirstChild(statName)
 			if statInstance then
 				statInstance.Value = savedValue
-				print(plr.Name.. ": ".. statInstance.Name.. " loaded!")
+				print("Modules/DataStoreManager.luau || ".. plr.Name.. ": ".. statInstance.Name.. " loaded!")
 			else
-				warn("DATASTORE | Missing stat '" .. statName .. "' for " .. plr.Name)
+				warn("Modules/DataStoreManager.luau || Missing stat '" .. statName .. "' for " .. plr.Name)
 			end
 		end
 
 	else
-		warn("DATASTORE | Player " .. plr.Name .. " has no data!")
+		warn("Modules/DataStoreManager.luau || Player " .. plr.Name .. " has no data!")
 		DataStoreManager._init(plr)
 	end
 
 	if not success then
-		warn("DATASTORE | FAILED TO LOAD DATA! ERR: ".. tostring(err))
+		warn("Modules/DataStoreManager.luau || FAILED TO LOAD DATA! ERR: ".. tostring(err))
 		return
 	end
 
@@ -154,19 +154,19 @@ end
 
 function DataStoreManager.getData(plr, dataName)
 	if not plr or not dataName then
-		warn("DATASTORE | getData called with invalid arguments")
+		warn("Modules/DataStoreManager.luau || getData called with invalid arguments")
 		return nil
 	end
 
 	local plrStats = plr:FindFirstChild("playerStats")
 	if not plrStats then
-		warn("DATASTORE | No stats folder found for " .. plr.Name)
+		warn("Modules/DataStoreManager.luau || No stats folder found for " .. plr.Name)
 		return nil
 	end
 
 	local stat = plrStats:FindFirstChild(dataName)
 	if not stat then
-		warn("DATASTORE | Stat '" .. dataName .. "' does not exist for " .. plr.Name)
+		warn("Modules/DataStoreManager.luau || Stat '" .. dataName .. "' does not exist for " .. plr.Name)
 		return nil
 	end
 

@@ -63,13 +63,13 @@ local function setupCameraLoop(camera)
 		local camModel = camera:FindFirstChild("Camera")
 		local movePartModel = camModel and camModel:FindFirstChild("MovePart")
 		if not movePartModel then
-			warn("CB | CAMERA MOVEPART NOT FOUND! " .. camera.Name)
+			warn("Modules/CoreFacilitySystems/Camera.luau || CAMERA MOVEPART NOT FOUND! " .. camera.Name)
 			return
 		end
 
 		local light = movePartModel:FindFirstChild("Light")
 		if not light then
-			warn("CB | CAMERA LIGHT NOT FOUND! " .. camera.Name)
+			warn("Modules/CoreFacilitySystems/Camera.luau || CAMERA LIGHT NOT FOUND! " .. camera.Name)
 			return
 		end
 
@@ -111,7 +111,7 @@ function Cameras.testCamera(camera, player)
 	local glass = movePart and movePart:FindFirstChild("Glass")
 
 	if not glass then
-		warn("TEST_CAM missing MovePart.Glass")
+		warn("Modules/CoreFacilitySystems/Camera.luau || TEST_CAM missing MovePart.Glass")
 		return
 	end
 

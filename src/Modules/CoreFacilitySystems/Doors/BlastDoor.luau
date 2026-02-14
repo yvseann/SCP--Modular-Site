@@ -10,7 +10,7 @@ blastDoor.bDeny = true
 local function requireChild(parent, childName)
 	local child = parent:FindFirstChild(childName)
 	if not child then
-		warn(childName .. " NOT FOUND!")
+		warn("Modules/CoreFacilitySystems/Doors/BlastDoor.luau || "..childName .. " NOT FOUND!")
 		return nil
 	end
 	return child
@@ -19,7 +19,7 @@ end
 local function requireSound(parent, soundName, flagName)
 	local sound = parent:FindFirstChild(soundName)
 	if not sound then
-		warn(soundName .. " not found! Error BlastDoor.luau!")
+		warn("Modules/CoreFacilitySystems/Doors/BlastDoor.luau || "..soundName .. " not found! Error BlastDoor.luau!")
 		blastDoor[flagName] = false
 		return nil
 	end
@@ -29,7 +29,7 @@ end
 local function requireIsOpen(door)
 	local isOpen = door:FindFirstChild("IsOpen")
 	if not isOpen or not isOpen:IsA("BoolValue") then
-		warn("IsOpen BoolValue missing on door!")
+		warn("Modules/CoreFacilitySystems/Doors/BlastDoor.luau || IsOpen BoolValue missing on door!")
 		return nil
 	end
 	return isOpen
@@ -37,7 +37,7 @@ end
 
 function blastDoor.open(plr, door)
 	if not plr or not door then
-		warn("PLR OR DOOR NOT FOUND! BLASTDOOR.LUAU")
+		warn("Modules/CoreFacilitySystems/Doors/BlastDoor.luau || PLR OR DOOR NOT FOUND! BLASTDOOR.LUAU")
 		return
 	end
 

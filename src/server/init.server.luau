@@ -48,7 +48,7 @@ end)
 -- In a case a developer shuts down servers, we need to save the data
 
 game:BindToClose(function()
-	print("Server/ Datastore | Server shutting down, saving all players...")
+	print("server/server.init.luau DATASTORE | Server shutting down, saving all players...")
 	for _, plr in ipairs(game.Players:GetPlayers()) do
 		dataStoreManager.saveData(plr)
 	end
@@ -58,7 +58,7 @@ end)
 
 task.spawn(function()
 	while task.wait(300) do -- 5 minutes
-		print("Server/ DATASTORE | Saving all players...")
+		print("server/server.init.luau DATASTORE | Saving all players...")
 		for _, plr in ipairs(game.Players:GetPlayers()) do
 			dataStoreManager.saveData(plr)
 		end

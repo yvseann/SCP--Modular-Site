@@ -6,7 +6,6 @@ function fixShadows._init()
 	local shadowParts = CS:GetTagged("FIXSHADOWSPLEASE")
 
 	for _, part in ipairs(shadowParts) do
-		warn("Modules/FixShadows.luau || Fixing shadows cuz roblox is dum.")
 		if part:IsA("BasePart") then
 			part.Transparency = -math.huge
 			if part.Material ~= Enum.Material.ForceField then
@@ -18,6 +17,5 @@ function fixShadows._init()
 		end
 	end
 end
-
 
 return fixShadows

@@ -29,7 +29,7 @@ end
 -- Detection Handling
 local function registerDetection(player)
 	AntiCheat.detections[player] = (AntiCheat.detections[player] or 0) + 1
-	warn("Modules/AntiCheat.luau || Flying Cheat Detected for %s (%d times)"):format(player.Name, AntiCheat.detections[player])
+	warn(("Modules/AntiCheat.luau || Flying Cheat Detected for %s (%d times)"):format(player.Name, AntiCheat.detections[player]))
 
 	if AntiCheat.detections[player] >= 3 then
 		player:Kick("ANTICHEAT SYSTEM | 3 STRIKES!")

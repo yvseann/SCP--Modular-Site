@@ -7,7 +7,7 @@ Door.HDTAGGED = CS:GetTagged("HeavyDoor")
 local blastDoor = require(script.Parent.Doors.BlastDoor)
 local heavyDoor = require(script.Parent.Doors.HeavyDoor)
 
-function Door.init()
+function Door._init()
     for _, BSDOOR in Door.BSTAGGED do
         local Touch = BSDOOR:GetChildren()
         for _, part in pairs(Touch) do

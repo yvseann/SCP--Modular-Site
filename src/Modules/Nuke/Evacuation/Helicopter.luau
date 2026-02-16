@@ -62,13 +62,13 @@ function Helicopter.flyToTarget(speed, waitTime, startTime)
 		cframeValue.Value = heli:GetPivot()
 
 		local tweenInfo = TweenInfo.new(speed)
-		local tween = TS:Create(cframeValue, tweenInfo, {
+		local moveTween = TS:Create(cframeValue, tweenInfo, {
 			Value = CFrame.new(target.Value.Position),
 		})
 		cframeValue.Changed:Connect(function()
 			heli:PivotTo(cframeValue.Value)
 		end)
-		tween:Play()
+		moveTween:Play()
 	end
 end
 

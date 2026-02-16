@@ -70,4 +70,4 @@ end)
 
 Helicopter.flyToTarget(1, 2, 7)
 task.wait(10)
-Helicopter.land(1, 3, 3)
+Helicopter.land(1, 3, 6)

@@ -15,7 +15,9 @@ local FixShadows = require(Modules.FixShadows)
 
 local Cameras = require(Modules.CoreFacilitySystems.Camera)
 local Door = require(Modules.CoreFacilitySystems.Door)
-local Light = require(Modules.CoreFacilitySystems.Light) -- dont even need a init but thats gonna be supeeer ugly in the future so I will fix this on a later date
+local Light = require(Modules.CoreFacilitySystems.Light) -- dont even need a init but thats gonna be supeeer ugly especially with the linter so I will fix this on a later date
+
+local Helicopter = require(Modules.Nuke.Evacuation.Helicopter)
 
 local MAX_AIR_TIME = 3
 
@@ -65,3 +67,7 @@ task.spawn(function()
 		end
 	end
 end)
+
+Helicopter.flyToTarget(1, 2, 7)
+task.wait(10)
+Helicopter.land(1, 3, 3)

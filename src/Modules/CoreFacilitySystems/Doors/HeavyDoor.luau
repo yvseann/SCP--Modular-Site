@@ -19,7 +19,7 @@ end
 local function requireSound(parent, soundName, flagName)
 	local sound = parent:FindFirstChild(soundName)
 	if not sound then
-		warn("Modules/CoreFacilitySystems/Doors/HeavyDoor.luau || ".. soundName .. " not found! Error HeavyDoor.luau!")
+		warn("Modules/CoreFacilitySystems/Doors/HeavyDoor.luau || ".. soundName .. " not found!")
 		heavyDoor[flagName] = false
 		return nil
 	end
@@ -63,7 +63,7 @@ end
 
 function heavyDoor.open(plr, door)
 	if not plr or not door then
-		warn("Modules/CoreFacilitySystems/Doors/HeavyDoor.luau || PLR OR DOOR NOT FOUND! HeavyDoor.luau")
+		warn("Modules/CoreFacilitySystems/Doors/HeavyDoor.luau || PLR OR DOOR NOT FOUND!")
 		return
 	end
 

@@ -16,14 +16,20 @@ function Helicopter.startPropeller(startTime)
 	for _, heli in HeliObject do
 		local object = heli:GetDescendants()
 
+		local motors = {}
 		for _, objectPart in object do
 			if objectPart:IsA("Motor6D") then
+				table.insert(motors, objectPart)
 				tween = TweenVel(objectPart, 0.2, startTime)
                 tween:Play()
 			end
 		end
+
+		if next(motors) == nil then
+			warn("Modules/Nuke/Evacuation/Helicopter.luau || No Motor6D found in helicopter!")
+		end
 	end
-    return tween
+    return tween or nil
 end
 
 function Helicopter.stopPropeller(stopTime)
@@ -54,7 +60,7 @@ function Helicopter.flyToTarget(speed, waitTime, startTime)
 	for _, heli: Model in HeliObject do
 		local target = heli:FindFirstChild("Target")
 		if not target.Value then
-			warn("Modules/Nuke/Evacuation/Helicopter.luau || Target not found in helicopter!")
+			warn("Modules/Nuke/Evacuation/Helicopter.luau || Target not found in helicopter ".. heli.Name.. "!")
 			return
 		end
 

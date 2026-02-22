@@ -103,7 +103,9 @@ function DataStoreManager.saveData(plr)
 
 	local dataStore = DataStoreManager.getStore()
 	local success, err = pcall(function()
-		dataStore:UpdateAsync(plr.UserId, tableToSave)
+		dataStore:UpdateAsync(plr.UserId, function()
+			return tableToSave
+		end)
 	end)
 
 	if success then

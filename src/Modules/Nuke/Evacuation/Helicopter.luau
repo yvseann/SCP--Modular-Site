@@ -50,38 +50,33 @@ function Helicopter.stopPropeller(stopTime)
 end
 
 function Helicopter.flyToTarget(speed, waitTime, startTime)
+    task.wait(5)
     local tween = Helicopter.startPropeller(startTime)
     tween.Completed:Wait()
     task.wait(waitTime)
 
-    local HeliObject = CS:GetTagged("Helicopter")
+	local HeliObject = CS:GetTagged("Helicopter")
 
-    for _, heli: Model in HeliObject do
-        local target = heli:FindFirstChild("Target")
-        if not target or not target.Value then
-            warn("Modules/Nuke/Evacuation/Helicopter.luau || Target not found in helicopter " .. heli.Name .. "!")
-            return
-        end
-        local posValue = Instance.new("Vector3Value")
-        posValue.Value = heli:GetPivot().Position
+	for _, heli: Model in HeliObject do
+		local target = heli:FindFirstChild("Target")
+		if not target.Value then
+			warn("Modules/Nuke/Evacuation/Helicopter.luau || Target not found in helicopter ".. heli.Name.. "!")
+			return
+		end
 
-        local tweenInfo = TweenInfo.new(speed, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
-        local moveTween = TS:Create(posValue, tweenInfo, {
-            Value = target.Value.Position
-        })
+		local cframeValue = Instance.new("CFrameValue")
+		cframeValue.Value = heli:GetPivot()
 
-        posValue.Changed:Connect(function(newPos)
-            local currentCFrame = heli:GetPivot()
-            local currentPos = currentCFrame.Position
-            local direction = (newPos - currentPos).Unit
-			local newCFrame = CFrame.lookAt(newPos, newPos + direction)
-			heli:PivotTo(newCFrame)
-        end)
-
-        moveTween:Play()
-    end
+		local tweenInfo = TweenInfo.new(speed)
+		local moveTween = TS:Create(cframeValue, tweenInfo, {
+			Value = CFrame.new(target.Value.Position),
+		})
+		cframeValue.Changed:Connect(function()
+			heli:PivotTo(cframeValue.Value)
+		end)
+		moveTween:Play()
+	end
 end
-
 
 function Helicopter.land(speed, waitTime, stopTime)
 	local HeliObject = CS:GetTagged("Helicopter")

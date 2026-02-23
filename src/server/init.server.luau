@@ -13,15 +13,14 @@ local dataStoreManager = require(Modules.DataStoreManager)
 local AntiCheat = require(Modules.AntiCheat)
 local Cameras = require(Modules.CoreFacilitySystems.Camera)
 local Door = require(Modules.CoreFacilitySystems.Door)
-local Light = require(Modules.CoreFacilitySystems.Light) -- Will soon be deprecated
+local Displays = require(Modules.Events.Displays)
+local Light = require(Modules.CoreFacilitySystems.lightOld) -- will soon be deprecated
 
-local Helicopter = require(Modules.Nuke.Evacuation.Helicopter)
+local Helicopter = require(Modules.Events.Nuke.Evacuation.Helicopter)
 
 local MAX_AIR_TIME = 3
 
 Door._init()
-
-game.Lighting.Brightness = 0
 
 -- Player Added
 game.Players.PlayerAdded:Connect(function(plr)
@@ -66,6 +65,11 @@ task.spawn(function()
 		end
 	end
 end)
+
+
+task.wait(5)
+warn("NUKE EVENT DEBUG!!!")
+Displays:alphaWarhead()
 
 Helicopter.flyToTarget(1, 2, 7)
 task.wait(10)

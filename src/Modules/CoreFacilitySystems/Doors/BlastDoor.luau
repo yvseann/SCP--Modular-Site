@@ -17,19 +17,10 @@ function blastDoor.open(plr, door)
 	local keyAccess = DS.getData(plr, "Keycard")
 
 	local keyRequired = doorHelper.requireChild(door, "keyLevel")
-	if not keyRequired then
-		return
-	end
-
 	local button1 = doorHelper.requireChild(door, "Button1")
-	if not button1 then
-		return
-	end
-
 	local door1 = doorHelper.requireChild(door, "Door1")
-	if not door1 then
-		return
-	end
+
+	if not keyRequired or not button1 or not door1 then return end
 
 	local bPush = doorHelper.requireSound(button1, "Push", "bPush", blastDoor)
 	local bSuccess = doorHelper.requireSound(button1, "Success", "bSuccess", blastDoor)

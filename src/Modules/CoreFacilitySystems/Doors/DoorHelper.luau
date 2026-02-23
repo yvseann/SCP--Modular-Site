@@ -1,6 +1,5 @@
 --[[
 TODO:
-
 Add more functions. Example: Door tween animation
 Keycard functions
 Closed/OpenPos calculations

@@ -1,6 +1,7 @@
 local Helicopter = {}
 
-local CS = game:GetService("CollectionService")
+local Modules = game:GetService("ServerScriptService").Modules
+local objectHelper = require(Modules.Helpers.objectHelper)
 local TS = game:GetService("TweenService")
 
 local function TweenVel(Motor, EndV, time)
@@ -10,7 +11,7 @@ local function TweenVel(Motor, EndV, time)
 end
 
 function Helicopter.startPropeller(startTime)
-	local HeliObject = CS:GetTagged("Helicopter")
+	local HeliObject = objectHelper:getTagged("Helicopter")
     local tween
 
 	for _, heli in HeliObject do
@@ -33,7 +34,7 @@ function Helicopter.startPropeller(startTime)
 end
 
 function Helicopter.stopPropeller(stopTime)
-	local HeliObject = CS:GetTagged("Helicopter")
+	local HeliObject = objectHelper:getTagged("Helicopter")
     local tween
 
 	for _, heli in HeliObject do
@@ -55,7 +56,7 @@ function Helicopter.flyToTarget(speed, waitTime, startTime)
     tween.Completed:Wait()
     task.wait(waitTime)
 
-	local HeliObject = CS:GetTagged("Helicopter")
+	local HeliObject = objectHelper:getTagged("Helicopter")
 
 	for _, heli: Model in HeliObject do
 		local target = heli:FindFirstChild("Target")
@@ -79,7 +80,7 @@ function Helicopter.flyToTarget(speed, waitTime, startTime)
 end
 
 function Helicopter.land(speed, waitTime, stopTime)
-	local HeliObject = CS:GetTagged("Helicopter")
+	local HeliObject = objectHelper:getTagged("Helicopter")
 
 	for _, heli: Model in HeliObject do
 		local inital = heli:FindFirstChild("Inital")

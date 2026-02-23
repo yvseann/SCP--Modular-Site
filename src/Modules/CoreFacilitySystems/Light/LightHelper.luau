@@ -1,0 +1,3 @@
+local LightHelper = {}
+
+return LightHelper

@@ -1,0 +1,3 @@
+local Switch = {}
+
+return Switch

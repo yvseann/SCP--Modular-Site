@@ -1,0 +1,3 @@
+local Light = {}
+
+return Light

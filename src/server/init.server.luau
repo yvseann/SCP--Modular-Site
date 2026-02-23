@@ -13,7 +13,7 @@ local dataStoreManager = require(Modules.DataStoreManager)
 local AntiCheat = require(Modules.AntiCheat)
 local Cameras = require(Modules.CoreFacilitySystems.Camera)
 local Door = require(Modules.CoreFacilitySystems.Door)
-local Light = require(Modules.CoreFacilitySystems.Light) -- dont even need a init but thats gonna be supeeer ugly especially with the linter so I will fix this on a later date
+local Light = require(Modules.CoreFacilitySystems.Light) -- Will soon be deprecated
 
 local Helicopter = require(Modules.Nuke.Evacuation.Helicopter)
 

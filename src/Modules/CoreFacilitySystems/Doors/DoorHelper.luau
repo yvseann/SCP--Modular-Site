@@ -1,3 +1,12 @@
+--[[
+TODO:
+
+Add more functions. Example: Door tween animation
+Keycard functions
+Closed/OpenPos calculations
+Playsound
+]]
+
 local DoorHelper = {}
 
 function DoorHelper.requireChild(parent, childName)

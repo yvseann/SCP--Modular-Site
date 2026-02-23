@@ -11,8 +11,6 @@ local Modules = script.Parent.Modules
 
 local dataStoreManager = require(Modules.DataStoreManager)
 local AntiCheat = require(Modules.AntiCheat)
-local FixShadows = require(Modules.FixShadows)
-
 local Cameras = require(Modules.CoreFacilitySystems.Camera)
 local Door = require(Modules.CoreFacilitySystems.Door)
 local Light = require(Modules.CoreFacilitySystems.Light) -- dont even need a init but thats gonna be supeeer ugly especially with the linter so I will fix this on a later date
@@ -22,7 +20,8 @@ local Helicopter = require(Modules.Nuke.Evacuation.Helicopter)
 local MAX_AIR_TIME = 3
 
 Door._init()
-FixShadows._init()
+
+game.Lightning.Brightness = 0
 
 -- Player Added
 game.Players.PlayerAdded:Connect(function(plr)

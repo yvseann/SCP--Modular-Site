@@ -1,47 +1,13 @@
 local heavyDoor = {}
 
 local DS = require(script.Parent.Parent.Parent.DataStoreManager)
+local doorHelper = require(script.Parent.DoorHelper)
+
 
 local TS = game:GetService("TweenService")
 
 heavyDoor.bPush = true
 heavyDoor.bDeny = true
-
-local function requireChild(parent, childName)
-	local child = parent:FindFirstChild(childName)
-	if not child then
-		warn("Modules/CoreFacilitySystems/Doors/HeavyDoor.luau || ".. childName .. " NOT FOUND!")
-		return nil
-	end
-	return child
-end
-
-local function requireSound(parent, soundName, flagName)
-	local sound = parent:FindFirstChild(soundName)
-	if not sound then
-		warn("Modules/CoreFacilitySystems/Doors/HeavyDoor.luau || ".. soundName .. " not found!")
-		heavyDoor[flagName] = false
-		return nil
-	end
-	return sound
-end
-
-local function getRandomSound(parent, prefix)
-	local sounds = {}
-
-	for _, obj in ipairs(parent:GetChildren()) do
-		if obj:IsA("Sound") and obj.Name:match("^" .. prefix .. "%d+$") then
-			table.insert(sounds, obj)
-		end
-	end
-
-	if #sounds == 0 then
-		warn("Modules/CoreFacilitySystems/Doors/HeavyDoor.luau || No sounds found for prefix: " .. prefix)
-		return nil
-	end
-
-	return sounds[math.random(1, #sounds)]
-end
 
 local function requireIsOpen(door)
 	local isOpen = door:FindFirstChild("IsOpen")
@@ -69,27 +35,27 @@ function heavyDoor.open(plr, door)
 
 	local keyAccess = DS.getData(plr, "Keycard")
 
-	local keyRequired = requireChild(door, "keyLevel")
+	local keyRequired = doorHelper.requireChild(door, "keyLevel")
 	if not keyRequired then
 		return
 	end
 
-	local button1 = requireChild(door, "Button1")
+	local button1 = doorHelper.requireChild(door, "Button1")
 	if not button1 then
 		return
 	end
 
-	local door1 = requireChild(door, "Door1")
+	local door1 = doorHelper.requireChild(door, "Door1")
 	if not door1 then
 		return
 	end
 
-	local bPush = requireSound(button1, "Push", "bPush")
-	local bSuccess = requireSound(button1, "Success", "bSuccess")
-	local bDeny = requireSound(button1, "Deny", "bDeny")
+	local bPush = doorHelper.requireSound(button1, "Push", "bPush", heavyDoor)
+	local bSuccess = doorHelper.requireSound(button1, "Success", "bSuccess", heavyDoor)
+	local bDeny = doorHelper.requireSound(button1, "Deny", "bDeny", heavyDoor)
 
-	local bOpen = getRandomSound(door1, "Open")
-	local bClose = getRandomSound(door1, "Close")
+	local bOpen = doorHelper.getRandomSound(door1, "Open")
+	local bClose = doorHelper.getRandomSound(door1, "Close")
 
 	local closedPos = door1:GetAttribute("ClosedPos")
 	local openPos = door1:GetAttribute("OpenPos")
@@ -105,7 +71,7 @@ function heavyDoor.open(plr, door)
 	local openTween = TS:Create(door1, tweenInfo, { CFrame = openPos })
 	local closeTween = TS:Create(door1, closeTweenInfo, { CFrame = closedPos })
 
-	local dPart2 = requireChild(door, "Door2")
+	local dPart2 = doorHelper.requireChild(door, "Door2")
 
 	local closedPos2 = dPart2:GetAttribute("ClosedPos2")
 	local openPos2 = dPart2:GetAttribute("OpenPos2")

@@ -21,7 +21,7 @@ local MAX_AIR_TIME = 3
 
 Door._init()
 
-game.Lightning.Brightness = 0
+game.Lighting.Brightness = 0
 
 -- Player Added
 game.Players.PlayerAdded:Connect(function(plr)

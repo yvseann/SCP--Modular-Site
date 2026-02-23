@@ -17,7 +17,7 @@ function timerHelper:msTimer(textLabel)
 		return
 	end
 
-	local duration = 30
+	local duration = 90
 	local startTime = time()
 	local endTime = startTime + duration
 

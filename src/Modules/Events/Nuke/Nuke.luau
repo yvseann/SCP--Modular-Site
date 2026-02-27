@@ -10,10 +10,13 @@ local Nuke = {}
 function Nuke.alphaWarhead()
 	local warheadSiren = objectHelper:findNamedObject(SoundService, "WarheadSiren")
 	local announceAlpha = objectHelper:findNamedObject(SoundService, "AnnounceAlpha")
-	if not warheadSiren or not announceAlpha then
+	local siren = objectHelper:findNamedObject(SoundService, "Siren")
+	if not warheadSiren or not announceAlpha or not siren then
 		return
 	end
 
+	siren:Play()
+	siren.Ended:Wait()
 	announceAlpha:Play()
 
 	task.delay(2.5, function()

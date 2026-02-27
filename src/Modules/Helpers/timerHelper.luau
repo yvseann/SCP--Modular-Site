@@ -6,9 +6,9 @@ local timerHelper = {}
 local function formatTime(timeInSeconds)
 	local minutes = math.floor(timeInSeconds / 60)
 	local seconds = math.floor(timeInSeconds % 60)
-	local milliseconds = math.floor((timeInSeconds % 1) * 1000)
+	local centiseconds = math.floor((timeInSeconds % 1) * 100)
 
-	return string.format("%02d:%02d.%03d", minutes, seconds, milliseconds)
+	return string.format("%02d:%02d.%02d", minutes, seconds, centiseconds)
 end
 
 function timerHelper:msTimer(textLabel)

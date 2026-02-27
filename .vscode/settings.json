@@ -18,5 +18,8 @@
         "editor.quickSuggestions": {
             "other": false
         }
-    }
+    },
+    "robloxLsp.diagnostics.disable": [
+        1012
+    ]
 }

@@ -10,22 +10,23 @@ game.Lighting.ClockTime = 00
 local Modules = script.Parent.Modules
 local Shared = game:GetService("ReplicatedStorage").Shared
 
-local Cmdr = require(Modules.Cmdr)
+local Cmdr = require(script.Parent.Cmdr)
 
 local dataStoreManager = require(Modules.DataStoreManager)
-local AntiCheat = require(Modules.AntiCheat)
+--local AntiCheat = require(Modules.AntiCheat)
 local Cameras = require(Modules.CoreFacilitySystems.Camera)
 local Door = require(Modules.CoreFacilitySystems.Door)
-local Displays = require(Modules.Events.Displays)
 local Light = require(Modules.CoreFacilitySystems.lightOld) -- will soon be deprecated
 
-local Helicopter = require(Modules.Events.Nuke.Evacuation.Helicopter)
+--local Helicopter = require(Modules.Events.Nuke.Evacuation.Helicopter)
 
-local MAX_AIR_TIME = 3
+--local MAX_AIR_TIME = 3
 
 Door._init()
 Cmdr:RegisterDefaultCommands()
 Cmdr:RegisterCommandsIn(Shared.Cmdr.Commands)
+Cmdr:RegisterHooksIn(Shared.Cmdr.Hooks)
+Cmdr:RegisterTypesIn(Shared.Cmdr.Types)
 
 -- Player Added
 game.Players.PlayerAdded:Connect(function(plr)
@@ -36,9 +37,9 @@ game.Players.PlayerAdded:Connect(function(plr)
 	-- AntiCheat stuff
 	plr.CharacterAdded:Connect(function(character)
 		task.wait() -- just in case
-		local root = character:WaitForChild("HumanoidRootPart")
+		--local root = character:WaitForChild("HumanoidRootPart")
 
-		AntiCheat.fly(plr, character, root, MAX_AIR_TIME) -- yeah
+		--AntiCheat.fly(plr, character, root, MAX_AIR_TIME) -- yeah
 	end)
 
 	-- Data Store Manager
@@ -76,6 +77,8 @@ task.wait(5)
 --warn("NUKE EVENT DEBUG!!!")
 --Displays:alphaWarhead()
 
-Helicopter.flyToTarget(1, 2, 7)
-task.wait(10)
-Helicopter.land(1, 3, 6)
+
+-- HELICOPTER DEBUNK
+--Helicopter.flyToTarget(1, 2, 7)
+--task.wait(10)
+--Helicopter.land(1, 3, 6)

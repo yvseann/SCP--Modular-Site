@@ -6,6 +6,15 @@ local objectHelper = require(Modules.Helpers.objectHelper)
 local Displays = require(script.Parent.Parent.Displays)
 
 local Nuke = {}
+local prefix = "Modules/Events/Nuke/Nuke.luau || "
+
+local function playSound(sound)
+	if sound:IsA("Sound") then
+		sound:Play()
+	else
+		warn(prefix.. "Found sound ".. sound.Name.. "is not actually a Sound Instance!")
+	end
+end
 
 function Nuke.alphaWarhead()
 	local warheadSiren = objectHelper:findNamedObject(SoundService, "WarheadSiren")
@@ -15,16 +24,17 @@ function Nuke.alphaWarhead()
 		return
 	end
 
-	siren:Play()
-	siren.Ended:Wait()
-	announceAlpha:Play()
+	playSound(siren)
+
+	task.wait(2.5)
+	playSound(announceAlpha)
 
 	task.delay(2.5, function()
 		Displays:alphaWarhead()
-	end)
+    end)
 
 	announceAlpha.Ended:Wait()
-	warheadSiren:Play()
+	playSound(warheadSiren)
 end
 
 

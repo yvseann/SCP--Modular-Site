@@ -5,7 +5,7 @@ return {
 	Group = "Admin",
 	Args = {
 		{
-			Type = "string",
+			Type = "warhead",
 			Name = "Warhead",
 			Description = "OMEGA/ALPHA",
 		},

@@ -6,6 +6,8 @@ local ReplicatedFirst = game:GetService("ReplicatedFirst")
 local StarterGui = game:GetService("StarterGui")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ContentProvider = game:GetService("ContentProvider")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
 
 -- remove default loading screen and guis
 ReplicatedFirst:RemoveDefaultLoadingScreen()
@@ -120,6 +122,17 @@ local function postLoad()
 	camera.CameraType = Enum.CameraType.Custom
 end
 
+local function transition(skipped, connection)
+	if not skipped then
+		connection:Disconnect()
+		connection = nil
+
+		task.wait(2)
+
+		postLoad()
+	end
+end
+
 -- loading stuff
 
 repeat
@@ -127,57 +140,51 @@ repeat
 until game:IsLoaded()
 
 local function addAsset(list, name, id)
-    table.insert(list, {
-        Name = name,
-        Id = id
-    })
+	table.insert(list, {
+		Name = name,
+		Id = id,
+	})
 end
 
 local function checkIfValid(instance, list)
-    if instance:IsA("MeshPart") then
-        if instance.MeshId ~= "" then
-            addAsset(list, instance.Name, instance.MeshId)
-        end
-        if instance.TextureID ~= "" then
-            addAsset(list, instance.Name, instance.TextureID)
-        end
-
-    elseif instance:IsA("SpecialMesh") then
-        if instance.MeshId ~= "" then
-            addAsset(list, instance.Name, instance.MeshId)
-        end
-        if instance.TextureId ~= "" then
-            addAsset(list, instance.Name, instance.TextureId)
-        end
-
-    elseif instance:IsA("Decal") or instance:IsA("Texture") then
-        if instance.Texture ~= "" then
-            addAsset(list, instance.Name, instance.Texture)
-        end
-
-    elseif instance:IsA("SurfaceAppearance") then
-        for _, map in ipairs({"ColorMap","MetalnessMap","NormalMap","RoughnessMap"}) do
-            local id = instance[map]
-            if id and id ~= "" then
-                addAsset(list, instance.Name .. "_" .. map, id)
-            end
-        end
-
-    elseif instance:IsA("Sound") then
-        if instance.SoundId ~= "" then
-            addAsset(list, instance.Name, instance.SoundId)
-        end
-
-    elseif instance:IsA("Animation") then
-        if instance.AnimationId ~= "" then
-            addAsset(list, instance.Name, instance.AnimationId)
-        end
-
-    elseif instance:IsA("ImageLabel") or instance:IsA("ImageButton") then
-        if instance.Image ~= "" then
-            addAsset(list, instance.Name, instance.Image)
-        end
-    end
+	if instance:IsA("MeshPart") then
+		if instance.MeshId ~= "" then
+			addAsset(list, instance.Name, instance.MeshId)
+		end
+		if instance.TextureID ~= "" then
+			addAsset(list, instance.Name, instance.TextureID)
+		end
+	elseif instance:IsA("SpecialMesh") then
+		if instance.MeshId ~= "" then
+			addAsset(list, instance.Name, instance.MeshId)
+		end
+		if instance.TextureId ~= "" then
+			addAsset(list, instance.Name, instance.TextureId)
+		end
+	elseif instance:IsA("Decal") or instance:IsA("Texture") then
+		if instance.Texture ~= "" then
+			addAsset(list, instance.Name, instance.Texture)
+		end
+	elseif instance:IsA("SurfaceAppearance") then
+		for _, map in ipairs({ "ColorMap", "MetalnessMap", "NormalMap", "RoughnessMap" }) do
+			local id = instance[map]
+			if id and id ~= "" then
+				addAsset(list, instance.Name .. "_" .. map, id)
+			end
+		end
+	elseif instance:IsA("Sound") then
+		if instance.SoundId ~= "" then
+			addAsset(list, instance.Name, instance.SoundId)
+		end
+	elseif instance:IsA("Animation") then
+		if instance.AnimationId ~= "" then
+			addAsset(list, instance.Name, instance.AnimationId)
+		end
+	elseif instance:IsA("ImageLabel") or instance:IsA("ImageButton") then
+		if instance.Image ~= "" then
+			addAsset(list, instance.Name, instance.Image)
+		end
+	end
 end
 
 local assetsToLoad = {}
@@ -192,38 +199,56 @@ end
 
 local ids = {}
 for _, asset in ipairs(assetsToLoad) do
-    table.insert(ids, asset.Id)
+	table.insert(ids, asset.Id)
 end
 
 local loaded = 0
 local total = #assetsToLoad
 
-local loadingTimeout = 5
+local loadingTimeout = 20
 local timedOut = false
 
 spawn(function()
-    task.wait(loadingTimeout)
-    if not timedOut then
-        RobloxError.Visible = true
+	task.wait(loadingTimeout)
+	if not timedOut then
+		RobloxError.Visible = true
 		timedOut = true
-    end
+	end
+end)
+
+local connection
+spawn(function()
+	connection = RunService.RenderStepped:Connect(function(dt)
+		throbber.Rotation += 180 * dt
+	end)
+end)
+
+local skipped
+UserInputService.InputBegan:Connect(function(input)
+	local keyDown = UserInputService:IsKeyDown(Enum.KeyCode.Space)
+	if keyDown then
+		Status.Text = "Skipped."
+		transition(skipped, connection)
+		skipped = true
+	end
 end)
 
 ContentProvider:PreloadAsync(ids, function()
-    loaded += 1
+	loaded += 1
 
-    local asset = assetsToLoad[loaded]
+	local asset = assetsToLoad[loaded]
 
-    Status.Text = "Loading " .. asset.Name .. " (" .. loaded .. "/" .. total .. ")"
-    StatusShadow.Text = Status.Text
+	Status.Text = "Loading " .. asset.Name .. " (" .. loaded .. "/" .. total .. ")"
+	StatusShadow.Text = Status.Text
 
-    loadingBarProgress.Size = UDim2.fromScale(loaded / total, 1)
+	loadingBarProgress.Size = UDim2.fromScale(loaded / total, 1)
 	--task.wait(0.05) -- removed to let the player in the game as soon as possible
 end)
+
+
+task.wait(5)
 
 -- Loading finished!
 Status.Text = "Finished."
 StatusShadow.Text = "Finished."
-task.wait(2)
-
-postLoad()
+transition(skipped, connection)

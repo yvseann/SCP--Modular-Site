@@ -5,6 +5,7 @@ local TweenService = game:GetService("TweenService")
 local ReplicatedFirst = game:GetService("ReplicatedFirst")
 local StarterGui = game:GetService("StarterGui")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ContentProvider = game:GetService("ContentProvider")
 
 -- remove default loading screen and guis
 ReplicatedFirst:RemoveDefaultLoadingScreen()
@@ -40,8 +41,7 @@ local skipTextShadow = loadingGUI:WaitForChild("SkipText"):WaitForChild("TextSha
 
 local introContainer = loadingGUI:WaitForChild("IntroContainer") :: Frame
 
-task.wait(5)
-
+-- postload stuff
 local function postLoad()
 	local invisTextGoal = {}
 	invisTextGoal.TextTransparency = 1
@@ -87,11 +87,11 @@ local function postLoad()
 	local objectHelper = require(shared.Helpers.objectHelper)
 	local camera = game.Workspace.CurrentCamera :: Camera
 	local camPart = objectHelper:getTagged("cineCam")
-	
+
 	-- setup the camera
 	camera.CameraType = Enum.CameraType.Scriptable
 	camera.CFrame = camPart[1].CFrame
-	
+
 	for _, instance in ipairs(loadingGUI:GetDescendants()) do
 		if instance:IsA("Frame") then
 			local fadeOut = TweenService:Create(instance, tweenInfo, { BackgroundTransparency = 1 })
@@ -101,9 +101,8 @@ local function postLoad()
 			local fadeOut = TweenService:Create(instance, tweenInfo, { ImageTransparency = 1 })
 			local fadeOut2 = TweenService:Create(instance, tweenInfo, { BackgroundTransparency = 1 })
 			fadeOut:Play()
-			fadeOut2:play()
+			fadeOut2:Play()
 			lastTween = fadeOut
-
 		elseif instance:IsA("TextLabel") or instance:IsA("TextButton") then
 			local fadeOut = TweenService:Create(instance, tweenInfo, { TextTransparency = 1 })
 			fadeOut:Play()
@@ -117,6 +116,114 @@ local function postLoad()
 
 	loadingGUI:Destroy()
 
+	task.wait(2)
+	camera.CameraType = Enum.CameraType.Custom
 end
+
+-- loading stuff
+
+repeat
+	task.wait()
+until game:IsLoaded()
+
+local function addAsset(list, name, id)
+    table.insert(list, {
+        Name = name,
+        Id = id
+    })
+end
+
+local function checkIfValid(instance, list)
+    if instance:IsA("MeshPart") then
+        if instance.MeshId ~= "" then
+            addAsset(list, instance.Name, instance.MeshId)
+        end
+        if instance.TextureID ~= "" then
+            addAsset(list, instance.Name, instance.TextureID)
+        end
+
+    elseif instance:IsA("SpecialMesh") then
+        if instance.MeshId ~= "" then
+            addAsset(list, instance.Name, instance.MeshId)
+        end
+        if instance.TextureId ~= "" then
+            addAsset(list, instance.Name, instance.TextureId)
+        end
+
+    elseif instance:IsA("Decal") or instance:IsA("Texture") then
+        if instance.Texture ~= "" then
+            addAsset(list, instance.Name, instance.Texture)
+        end
+
+    elseif instance:IsA("SurfaceAppearance") then
+        for _, map in ipairs({"ColorMap","MetalnessMap","NormalMap","RoughnessMap"}) do
+            local id = instance[map]
+            if id and id ~= "" then
+                addAsset(list, instance.Name .. "_" .. map, id)
+            end
+        end
+
+    elseif instance:IsA("Sound") then
+        if instance.SoundId ~= "" then
+            addAsset(list, instance.Name, instance.SoundId)
+        end
+
+    elseif instance:IsA("Animation") then
+        if instance.AnimationId ~= "" then
+            addAsset(list, instance.Name, instance.AnimationId)
+        end
+
+    elseif instance:IsA("ImageLabel") or instance:IsA("ImageButton") then
+        if instance.Image ~= "" then
+            addAsset(list, instance.Name, instance.Image)
+        end
+    end
+end
+
+local assetsToLoad = {}
+
+for _, inst in ipairs(game.Workspace:GetDescendants()) do
+	checkIfValid(inst, assetsToLoad)
+end
+
+for _, inst in ipairs(StarterGui:GetDescendants()) do
+	checkIfValid(inst, assetsToLoad)
+end
+
+local ids = {}
+for _, asset in ipairs(assetsToLoad) do
+    table.insert(ids, asset.Id)
+end
+
+local loaded = 0
+local total = #assetsToLoad
+
+local loadingTimeout = 5
+local timedOut = false
+
+spawn(function()
+    task.wait(loadingTimeout)
+    if not timedOut then
+        RobloxError.Visible = true
+		timedOut = true
+    end
+end)
+
+ContentProvider:PreloadAsync(ids, function()
+    loaded += 1
+
+    local asset = assetsToLoad[loaded]
+
+    Status.Text = "Loading " .. asset.Name .. " (" .. loaded .. "/" .. total .. ")"
+    StatusShadow.Text = Status.Text
+
+    loadingBarProgress.Size = UDim2.fromScale(loaded / total, 1)
+	--task.wait(0.05) -- removed to let the player in the game as soon as possible
+end)
+
+-- Loading finished!
+Status.Text = "Finished."
+StatusShadow.Text = "Finished."
+task.wait(2)
 
 postLoad()

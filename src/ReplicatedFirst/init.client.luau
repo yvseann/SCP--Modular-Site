@@ -118,11 +118,20 @@ local function postLoad()
 
 	loadingGUI:Destroy()
 
-	local cineModel = ReplicatedStorage.Cinematic
+	local cineModel = ReplicatedStorage.Cinematic:Clone()
 	cineModel.Parent = game.Workspace[".SCRIPTABLES"]
 
 	local finalTween
-	for Obj in ipairs(cineModel.scp:GetDescendants()) do
+	for _, Obj in ipairs(cineModel.vyrelis:GetDescendants()) do
+		Obj.Transparency = 1
+		local tween = TweenService:Create(Obj, tweenInfo, {Transparency = 0})
+		tween:Play()
+		finalTween = tween
+	end
+
+	task.wait(0.5)
+
+	for _, Obj in ipairs(cineModel.scp:GetDescendants()) do
 		Obj.Transparency = 1
 		local tween = TweenService:Create(Obj, tweenInfo, {Transparency = 0})
 		tween:Play()

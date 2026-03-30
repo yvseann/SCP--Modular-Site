@@ -118,6 +118,19 @@ local function postLoad()
 
 	loadingGUI:Destroy()
 
+	local cineModel = ReplicatedStorage.Cinematic
+	cineModel.Parent = game.Workspace[".SCRIPTABLES"]
+
+	local finalTween
+	for Obj in ipairs(cineModel.scp:GetDescendants()) do
+		Obj.Transparency = 1
+		local tween = TweenService:Create(Obj, tweenInfo, {Transparency = 0})
+		tween:Play()
+		finalTween = tween
+	end
+
+	finalTween.Completed:Wait()
+
 	task.wait(2)
 	camera.CameraType = Enum.CameraType.Custom
 end
@@ -125,7 +138,6 @@ end
 local function transition(skipped, connection)
 	if not skipped then
 		connection:Disconnect()
-		connection = nil
 
 		task.wait(2)
 
@@ -194,6 +206,10 @@ for _, inst in ipairs(game.Workspace:GetDescendants()) do
 end
 
 for _, inst in ipairs(StarterGui:GetDescendants()) do
+	checkIfValid(inst, assetsToLoad)
+end
+
+for _, inst in ipairs(ReplicatedStorage:GetDescendants()) do
 	checkIfValid(inst, assetsToLoad)
 end
 

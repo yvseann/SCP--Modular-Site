@@ -233,7 +233,7 @@ local total = #assetsToLoad
 local loadingTimeout = 20
 local timedOut = false
 
-spawn(function()
+task.spawn(function()
 	task.wait(loadingTimeout)
 	if not timedOut then
 		RobloxError.Visible = true
@@ -242,14 +242,14 @@ spawn(function()
 end)
 
 local connection
-spawn(function()
+task.spawn(function()
 	connection = RunService.RenderStepped:Connect(function(dt)
 		throbber.Rotation += 180 * dt
 	end)
 end)
 
 local skipped
-UserInputService.InputBegan:Connect(function(input)
+UserInputService.InputBegan:Connect(function()
 	local keyDown = UserInputService:IsKeyDown(Enum.KeyCode.Space)
 	if keyDown then
 		Status.Text = "Skipped."

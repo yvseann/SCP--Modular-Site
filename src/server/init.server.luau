@@ -1,3 +1,4 @@
+--!strict
 --[[
 	Author: Sean_Developer (yvseann)
 

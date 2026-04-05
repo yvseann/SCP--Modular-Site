@@ -32,7 +32,7 @@ local RobloxError = loadingContainer:WaitForChild("2_RobloxError") :: Frame
 
 -- throbber
 
-local throbber = loadingGUI:WaitForChild("SavingLoadingIcon")
+local throbber = loadingGUI:WaitForChild("SavingLoadingIcon") :: ImageLabel
 
 -- skip text
 
@@ -249,12 +249,15 @@ task.spawn(function()
 end)
 
 local skipped
-UserInputService.InputBegan:Connect(function()
+
+local UISConnection
+UISConnection = UserInputService.InputBegan:Connect(function()
 	local keyDown = UserInputService:IsKeyDown(Enum.KeyCode.Space)
 	if keyDown then
+		skipped = true
 		Status.Text = "Skipped."
 		transition(skipped, connection)
-		skipped = true
+		UISConnection:Disconnect()
 	end
 end)
 

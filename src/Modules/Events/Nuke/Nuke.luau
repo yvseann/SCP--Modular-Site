@@ -18,6 +18,7 @@ end
 
 function Nuke.alphaWarhead()
 	local warheadSiren = objectHelper:findNamedObject(SoundService, "WarheadSiren")
+	local warheadMusic = objectHelper:findNamedObject(SoundService, "WarheadMusic")
 	local announceAlpha = objectHelper:findNamedObject(SoundService, "AnnounceAlpha")
 	local siren = objectHelper:findNamedObject(SoundService, "Siren")
 	if not warheadSiren or not announceAlpha or not siren then
@@ -35,6 +36,7 @@ function Nuke.alphaWarhead()
 
 	announceAlpha.Ended:Wait()
 	playSound(warheadSiren)
+	playSound(warheadMusic)
 end
 
 

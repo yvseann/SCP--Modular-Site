@@ -42,11 +42,11 @@ local DataStoreManager = {}
 DataStoreManager.loadedData = false
 
 DataStoreManager.stats = {
-	Stat.new("Credits", "IntValue", 100, true),
-	Stat.new("Level", "IntValue", 1, true),
-	Stat.new("XP","IntValue",  0, true),
-	Stat.new("Reputation", "IntValue", 0, true),
-	Stat.new("Keycard", "IntValue", 1, false)
+	Stat.new("Credits", "IntValue", 100),
+	Stat.new("Level", "IntValue", 1),
+	Stat.new("XP","IntValue",  0),
+	Stat.new("Reputation", "IntValue", 0),
+	Stat.new("Keycard", "IntValue", 1)
 }
 
 local keys = {

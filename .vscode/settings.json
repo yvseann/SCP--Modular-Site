@@ -21,5 +21,6 @@
     },
     "robloxLsp.diagnostics.disable": [
         1012
-    ]
+    ],
+    "stylua.targetReleaseVersion": "latest"
 }

@@ -1,3 +1,0 @@
-local Switch = {}
-
-return Switch

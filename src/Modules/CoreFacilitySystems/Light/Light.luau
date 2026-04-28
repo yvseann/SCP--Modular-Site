@@ -1,3 +1,0 @@
-local Light = {}
-
-return Light

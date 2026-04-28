@@ -78,7 +78,7 @@ function DataStoreManager.getStore()
 		print("Modules/DataStoreManager.luau || RUNNING IN DEVELOPER ENVIRONMENT")
 		return dataStoreService:GetDataStore(keys.dev)
 	else
-		print("Modules/DataStoreManager.luau || PLAYER MODE DATASTORE")
+		print("Modules/DataStoreManager.luau || LIVE ENVIRONMENT DATASTORE")
 		return dataStoreService:GetDataStore(keys.live)
 	end
 end

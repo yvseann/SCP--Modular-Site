@@ -1,3 +1,0 @@
-local LightHelper = {}
-
-return LightHelper

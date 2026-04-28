@@ -1,0 +1,11 @@
+name = "yvseann/scp_ms"
+version = "0.1.0"
+description = "SCP: Modular Site"
+authors = ["Sean Osborne(yvseann)", "yvleopard", "alex"]
+repository = "https://github.com/yvseann/SCP--MODULAR-SITE"
+
+[target]
+environment = "luau"
+
+[indices]
+default = "https://github.com/pesde-pkg/index"

@@ -84,16 +84,6 @@ local function postLoad()
 	local lastTween
 
 	task.wait(5)
-	-- stuff i need
-	local shared = ReplicatedStorage.Shared
-	local objectHelper = require(shared.Helpers.objectHelper)
-	local camera = game.Workspace.CurrentCamera :: Camera
-	local camPart = objectHelper:getTagged("cineCam")
-
-	-- setup the camera
-	camera.CameraType = Enum.CameraType.Scriptable
-	camera.CFrame = camPart[1].CFrame
-
 	for _, instance in ipairs(loadingGUI:GetDescendants()) do
 		if instance:IsA("Frame") then
 			local fadeOut = TweenService:Create(instance, tweenInfo, { BackgroundTransparency = 1 })
@@ -117,31 +107,6 @@ local function postLoad()
 	end
 
 	loadingGUI:Destroy()
-
-	local cineModel = ReplicatedStorage.Cinematic:Clone()
-	cineModel.Parent = game.Workspace[".SCRIPTABLES"]
-
-	local finalTween
-	for _, Obj in ipairs(cineModel.vyrelis:GetDescendants()) do
-		Obj.Transparency = 1
-		local tween = TweenService:Create(Obj, tweenInfo, {Transparency = 0})
-		tween:Play()
-		finalTween = tween
-	end
-
-	task.wait(0.5)
-
-	for _, Obj in ipairs(cineModel.scp:GetDescendants()) do
-		Obj.Transparency = 1
-		local tween = TweenService:Create(Obj, tweenInfo, {Transparency = 0})
-		tween:Play()
-		finalTween = tween
-	end
-
-	finalTween.Completed:Wait()
-
-	task.wait(2)
-	camera.CameraType = Enum.CameraType.Custom
 end
 
 local function transition(skipped, connection)

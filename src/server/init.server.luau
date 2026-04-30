@@ -8,8 +8,9 @@
 
 local Modules = script.Parent.Modules
 local Shared = game:GetService("ReplicatedStorage").Shared
+local Packages = game:GetService("ReplicatedStorage").Packages
 
-local Cmdr = require(script.Parent.Cmdr)
+local Cmdr = require(Packages.cmdr)
 
 local InteractionSystem = require(Modules.Interactions.InteractionSystem)
 local dataStoreManager = require(Modules.DataStoreManager)

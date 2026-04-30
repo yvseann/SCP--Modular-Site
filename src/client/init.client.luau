@@ -1,5 +1,4 @@
-local Shared = game:GetService("ReplicatedStorage"):WaitForChild("Shared")
+local Packages = game:GetService("ReplicatedStorage").Packages
+local Hologram = require(Packages.Hologram)
 
-local Cmdr = require(Shared.Parent.CmdrClient)
-
-Cmdr:SetActivationKeys({ Enum.KeyCode.F2 })
+Hologram.InitialiseGlobally(true, true)

@@ -7,11 +7,8 @@
 ]]
 
 local InteractionSystem = {}
-local prefix = "Modules/Interactions/InteractionSystem.luau || "
 
-function InteractionSystem.__init()
-    return
-end
+local prefix = "Modules/Interactions/InteractionSystem.luau || "
 
 function InteractionSystem.Interacted(interaction: StringValue)
     -- get objectvalue in interaction to see whatever it was interacted with, and then find stringvalue of interaction

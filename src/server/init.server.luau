@@ -6,21 +6,23 @@
 	Description: Controls the server functionality using modules.
 ]]
 
+local CollectionService = game:GetService("CollectionService")
+
 local Modules = script.Parent.Modules
 local Shared = game:GetService("ReplicatedStorage").Shared
 local Packages = game:GetService("ReplicatedStorage").Packages
 
 local Cmdr = require(Packages.cmdr)
 
-local InteractionSystem = require(Modules.Interactions.InteractionSystem)
 local dataStoreManager = require(Modules.DataStoreManager)
+local interactionSystem = require(Modules.Interactions.InteractionSystem)
 
 Cmdr:RegisterDefaultCommands()
 Cmdr:RegisterCommandsIn(Shared.Cmdr.Commands)
 Cmdr:RegisterHooksIn(Shared.Cmdr.Hooks)
 Cmdr:RegisterTypesIn(Shared.Cmdr.Types)
 
-InteractionSystem.__init()
+interactionSystem._init()
 
 -- Player Added
 game.Players.PlayerAdded:Connect(function(plr)
@@ -50,3 +52,19 @@ task.spawn(function()
 		end
 	end
 end)
+
+local interactives = CollectionService:GetTagged("Interactive")
+for _, interactive in ipairs(interactives) do
+	if interactive:IsA("ProximityPrompt") then
+		interactive.Triggered:Connect(function()
+			interactionSystem.Interacted(interactive)
+		end)
+	else
+		for _, interactive in ipairs(interactive:GetDescendants()) do
+			if interactive:IsA("ProximityPrompt") then
+				interactionSystem.Interacted(interactive)
+				break
+			end
+		end
+	end
+end

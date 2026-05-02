@@ -107,6 +107,11 @@ local function postLoad()
 	end
 
 	loadingGUI:Destroy()
+
+	local Packages = game:GetService("ReplicatedStorage").Packages
+
+	local Hologram = require(Packages.Hologram)
+	Hologram.InitialiseGlobally(true, true)
 end
 
 local function transition(skipped, connection)

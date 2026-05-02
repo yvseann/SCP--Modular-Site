@@ -3,26 +3,66 @@
     Author: Sean_Developer (yvseann)
 
     File: InteractionSystem.luau
-    Description: System used for creating interaction prompts.
+    Description: System used for processing interactions with proximityprompts.
 ]]
 
 local InteractionSystem = {}
 
 local prefix = "Modules/Interactions/InteractionSystem.luau || "
 
-function InteractionSystem.Interacted(interaction: StringValue)
-    -- get objectvalue in interaction to see whatever it was interacted with, and then find stringvalue of interaction
-    interaction = interaction:FindFirstChild("interactionType") :: StringValue
-    if not interaction then
-        warn(prefix.. "Interaction type does not exist. Interaction will not work. How the hell was this called?")
+local allowedInteractions: {[string]: any} = {}
+local interactionFolderExists = true
+
+function InteractionSystem._init()
+    local InteractionsFolder = script.Parent:FindFirstChild("Interactions")
+
+    if not InteractionsFolder or not InteractionsFolder:IsA("Folder") then
+        warn(prefix .. "Interactions folder does not exist or is not a folder! Continuing but interactions may fail.")
+        interactionFolderExists = false
         return
     end
-    if not interaction:IsA("StringValue") then
-        warn(prefix.. "Interaction type '".. interaction.Value.."' is not a string value. Sean, fix your stuff.")
+
+    for _, module in ipairs(InteractionsFolder:GetDescendants()) do
+        if module:IsA("ModuleScript") then
+            local ok, result = pcall(require, module)
+            if ok then
+                allowedInteractions[module.Name] = result
+            else
+                warn(prefix .. "Failed to require module '" .. module.Name .. "': " .. tostring(result))
+            end
+        end
     end
-    
-    -- check if interaction exists
-    -- DoorInteraction.Interacted(interaction)
+end
+
+function InteractionSystem.Interacted(interaction: ProximityPrompt)
+    local interactionType = interaction:FindFirstChild("interactionType")
+    if not interactionType or not interactionType:IsA("StringValue") or interactionType.Value == "" then
+        warn(prefix .. "Invalid or missing interactionType StringValue.")
+        return
+    end
+
+    local objectValue = interaction:FindFirstChild("object")
+    if not objectValue or not objectValue:IsA("ObjectValue") or objectValue.Value == nil then
+        warn(prefix .. "Invalid or missing object ObjectValue.")
+        return
+    end
+
+    if not interactionFolderExists then
+        warn(prefix .. "Interaction folder missing — cannot process interaction.")
+        return
+    end
+
+    local module = allowedInteractions[interactionType.Value]
+    if not module then
+        warn(prefix .. "No interaction module found for type '" .. interactionType.Value .. "'.")
+        return
+    end
+
+    if typeof(module.Interacted) == "function" then
+        module.Interacted(objectValue.Value)
+    else
+        warn(prefix .. "Module '" .. interactionType.Value .. "' does not contain an Interacted() function.")
+    end
 end
 
 return InteractionSystem

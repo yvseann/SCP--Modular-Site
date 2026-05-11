@@ -108,9 +108,9 @@ local function postLoad()
 
 	loadingGUI:Destroy()
 
-	local Packages = game:GetService("ReplicatedStorage").Packages
+	local Packages = game:GetService("ReplicatedStorage").RojoBeingAnnoying
 
-	local Hologram = require(Packages.Hologram)
+	local Hologram = require(Packages.Hologram) :: any
 	Hologram.InitialiseGlobally(true, true)
 end
 

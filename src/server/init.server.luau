@@ -52,19 +52,3 @@ task.spawn(function()
 		end
 	end
 end)
-
-local interactives = CollectionService:GetTagged("Interactive")
-for _, interactive in ipairs(interactives) do
-	if interactive:IsA("ProximityPrompt") then
-		interactive.Triggered:Connect(function()
-			interactionSystem.Interacted(interactive)
-		end)
-	else
-		for _, interactive in ipairs(interactive:GetDescendants()) do
-			if interactive:IsA("ProximityPrompt") then
-				interactionSystem.Interacted(interactive)
-				break
-			end
-		end
-	end
-end

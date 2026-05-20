@@ -1,3 +1,11 @@
+--!strict
+--[[
+    Name: Displays
+    Description: Handles the Information Display Logic
+
+    Author: Sean_Developer (yvseann)
+]]
+
 local modules = game:GetService("ServerScriptService").Modules
 
 local objectHelper = require(modules.Helpers.objectHelper)

@@ -1,3 +1,11 @@
+--!strict
+--[[
+    Name: timerHelper
+    Description: handles time
+
+    Author: Sean_Developer (yvseann)
+]]
+
 local RS = game:GetService("RunService")
 
 local prefix = "Modules/Helpers/timerHelper.luau || "

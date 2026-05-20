@@ -1,3 +1,11 @@
+--!strict
+--[[
+    Name: Helicopter
+    Description: Handles Helicopter Logic
+
+    Author: Sean_Developer (yvseann)
+]]
+
 local Helicopter = {}
 
 local Modules = game:GetService("ServerScriptService").Modules

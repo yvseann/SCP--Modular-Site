@@ -18,13 +18,15 @@ function InteractionSystem._init()
 	local interactives = CollectionService:GetTagged("Interactive")
 	for _, interactive in ipairs(interactives) do
 		if interactive:IsA("ProximityPrompt") then
-			interactive.Triggered:Connect(function()
-				InteractionSystem.Interacted(interactive)
+			interactive.Triggered:Connect(function(plr)
+				InteractionSystem.Interacted(interactive, plr)
 			end)
 		else
 			for _, interactive in ipairs(interactive:GetDescendants()) do
 				if interactive:IsA("ProximityPrompt") then
-					InteractionSystem.Interacted(interactive)
+					interactive.Triggered:Connect(function(plr)
+						InteractionSystem.Interacted(interactive, plr)
+					end)
 					break
 				end
 			end
@@ -51,7 +53,7 @@ function InteractionSystem._init()
 	end
 end
 
-function InteractionSystem.Interacted(interaction: ProximityPrompt)
+function InteractionSystem.Interacted(interaction: ProximityPrompt, plr: Player)
 	local interactionType = interaction:FindFirstChild("interactionType")
 	if not interactionType or not interactionType:IsA("StringValue") or interactionType.Value == "" then
 		warn(prefix .. "Invalid or missing interactionType StringValue.")

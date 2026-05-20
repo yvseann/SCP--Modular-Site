@@ -1,3 +1,10 @@
+--!strict
+--[[
+    Name: DoorRegistry
+    Description: Register door
+
+    Author: Sean_Developer (yvseann)
+]]
 local EZDoor = require(script.Parent.Parent.Classes.Door.EZDoor)
 
 local instances = {}

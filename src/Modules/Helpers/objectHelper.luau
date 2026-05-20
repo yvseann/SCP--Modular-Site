@@ -1,3 +1,11 @@
+--!strict
+--[[
+    Name: objectHelper
+    Description: More in depth object stuff
+
+    Author: Sean_Developer (yvseann)
+]]
+
 local CS = game:GetService("CollectionService")
 local prefix = "Modules/Helpers/objectHelper.luau || "
 

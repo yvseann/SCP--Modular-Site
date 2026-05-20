@@ -1,3 +1,11 @@
+--!strict
+--[[
+    Name: Nuke
+    Description: Handles the Nuke Logic
+
+    Author: Sean_Developer (yvseann)
+]]
+
 local SoundService = game:GetService("SoundService")
 
 local Modules = game:GetService("ServerScriptService").Modules

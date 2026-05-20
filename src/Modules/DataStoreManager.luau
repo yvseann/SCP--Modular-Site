@@ -57,7 +57,7 @@ local keys = {
 --: Init the DataStore
 function DataStoreManager._init(plr)
 	if plr and plr:IsA("Player") then
-		warn("Modules/DataStoreManager.luau || Initializing Folders for " .. plr.Name)
+		print("Modules/DataStoreManager.luau || Initializing Folders for " .. plr.Name)
 
 		local playerStats = Instance.new("Folder")
 		playerStats.Name = "playerStats"
@@ -142,7 +142,7 @@ function DataStoreManager.loadData(plr)
 		end
 
 	else
-		warn("Modules/DataStoreManager.luau || Player " .. plr.Name .. " has no data!")
+		print("Modules/DataStoreManager.luau || Player " .. plr.Name .. " has no data!")
 		DataStoreManager._init(plr)
 	end
 

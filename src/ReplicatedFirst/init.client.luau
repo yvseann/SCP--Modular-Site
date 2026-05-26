@@ -112,6 +112,8 @@ local function postLoad()
 
 	local Hologram = require(Packages.Hologram) :: any
 	Hologram.InitialiseGlobally(true, true)
+	Hologram:SetAlwaysOnTop(true)
+	Hologram:SetDisabledSides({"Left", "Right", "Bottom", "Back", "Top"})
 end
 
 local function transition(skipped, connection)

@@ -25,16 +25,16 @@ function EZDoor.new(model)
 	self.Model = model
 	self.IsOpen = false
 
-	self.RankRequired = model:GetAttribute("RankRequired") or 0
+	self.RankRequired = model:GetAttribute("RankRequired") or 0 :: number
 
 	self.TweenTime = model:GetAttribute("TweenTime") or 1
-	self.MoveIncrement = model:GetAttribute("MoveIncrement") or 5
+	self.MoveIncrement = model:GetAttribute("MoveIncrement") or 4
 	self.WaitTime = model:GetAttribute("WaitTime") or 2
 
-	self.FrontDoor = model:WaitForChild("FrontDoor")
-	self.BackDoor = model:WaitForChild("BackDoor")
-
 	self.Buttons = model.Parent:WaitForChild("Buttons")
+
+	self.OpenSound = model.Parent.SoundPart:WaitForChild("OPEN")
+	self.CloseSound = model.Parent.SoundPart:WaitForChild("CLOSE")
 
 	self.OriginalCFrames = {}
 	self:_cacheOriginalCFrames()
@@ -58,36 +58,31 @@ function EZDoor:Open()
 	self.IsOpen = true
 
 	local tweenInfo = TweenInfo.new(self.TweenTime)
+	local offset = CFrame.new(self.MoveIncrement, 0, 0)
 
-	local frontOffset = CFrame.new(self.MoveIncrement, 0, 0)
-	local backOffset = CFrame.new(-self.MoveIncrement, 0, 0)
-
-	local frontTween = TweenService:Create(self.FrontDoor, tweenInfo, { CFrame = self.FrontDoor.CFrame :: CFrame * frontOffset })
-
-	local backTween = TweenService:Create(self.BackDoor, tweenInfo, { CFrame = self.BackDoor.CFrame * backOffset })
-
-	task.spawn(play, frontTween)
-	task.spawn(play, backTween)
+	self.OpenSound:Play()
 	KeypadOne:SetOpening()
 	KeypadTwo:SetOpening()
 
 	for part, original in pairs(self.OriginalCFrames) do
-		if part ~= self.FrontDoor and part ~= self.BackDoor then
-			local offset = (part:IsDescendantOf(self.FrontDoor)) and frontOffset or backOffset
-			local tween = TweenService:Create(part, tweenInfo, { CFrame = original * offset })
-			task.spawn(play, tween)
-		end
+		local tween = TweenService:Create(part, tweenInfo, {
+			CFrame = original :: CFrame * offset,
+		})
+		task.spawn(play, tween)
 	end
 
 	task.wait(self.TweenTime)
 	KeypadOne:SetOpen()
 	KeypadTwo:SetOpen()
 	task.wait(self.WaitTime)
+	self.CloseSound:Play()
 	KeypadOne:SetClosing()
 	KeypadTwo:SetClosing()
 
 	for part, original in pairs(self.OriginalCFrames) do
-		local tween = TweenService:Create(part, tweenInfo, { CFrame = original })
+		local tween = TweenService:Create(part, tweenInfo, {
+			CFrame = original,
+		})
 		task.spawn(play, tween)
 	end
 
